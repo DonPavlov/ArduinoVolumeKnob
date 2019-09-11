@@ -27,6 +27,10 @@ void setup() {
   strip.begin();
   setColor(BLACK);
 
+  // disable leds because we only need neopixels
+  pinMode(LED_BUILTIN_TX,INPUT);
+  pinMode(LED_BUILTIN_RX,INPUT);
+
   // pinMode(VIBRA_PIN, OUTPUT);
 
   Timer1.attachInterrupt([](){ encoder.service(); }, 1000 );
