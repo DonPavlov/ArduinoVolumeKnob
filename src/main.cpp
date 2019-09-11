@@ -1,10 +1,17 @@
 #include <Arduino.h>
-#include <Keyboard.h>
+#include <HID-Project.h>
+
 void setup() {
-  Keyboard.begin();
+  // Initialize Consumer API
+  Consumer.begin();
 }
 
 void loop() {
-  delay(10000);
-  //Keyboard.println("Hello, Make!");
+  // Send media key codes
+//   Consumer.write(MEDIA_VOL_UP);
+//   delay(2000);
+//   Consumer.write(MEDIA_VOL_DOWN);
+//   delay(2000);
+//   Consumer.write(MEDIA_VOL_MUTE);
+//   delay(2000);
 }
