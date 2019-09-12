@@ -6,7 +6,7 @@
 
 #define LIGHT_PIN    10
 // #define VIBRA_PIN    16
-#define NR_OF_PIXELS 12
+#define NR_OF_PIXELS 16
 #define TIMEOUT_VIBRA_MS   50
 #define TIMEOUT_LIGHTS_MS 600
 
