@@ -22,19 +22,24 @@ int16_t intensity = 0;
 
 void setColor(uint32_t c);
 void volumeChange(uint16_t key, uint32_t color);
+void setup();
+void loop();
 
 void setup() {
+  lastInteraction = 0;
+  intensity = 0;
   strip.begin();
+  strip.show();
   setColor(BLACK);
-
   // disable leds because we only need neopixels
   pinMode(LED_BUILTIN_TX,INPUT);
   pinMode(LED_BUILTIN_RX,INPUT);
 
   // pinMode(VIBRA_PIN, OUTPUT);
-
-  Timer1.attachInterrupt([](){ encoder.service(); }, 1000 );
-
+  Timer1.stop();
+  Timer1.detachInterrupt();
+  Timer1.initialize(1000);
+  Timer1.attachInterrupt([]{ encoder.service(); });
   Consumer.begin();
 }
 
@@ -50,6 +55,7 @@ void loop() {
       volumeChange(MEDIA_VOL_DOWN, RED);
     }
   }
+
   ClickEncoder::Button b = encoder.getButton();
   if (b != ClickEncoder::Open) {
     switch (b) {
@@ -57,15 +63,12 @@ void loop() {
         intensity = 9;
         volumeChange(MEDIA_VOL_MUTE, BLUE);
         break;
-    }
+   }
   }
   //
-  // LEDs / Vibration nach inaktiver Zeit abschalten.
+  // LEDs nach inaktiver Zeit abschalten.
   //
   unsigned long timeDiff = millis() - lastInteraction;
-  if (timeDiff > TIMEOUT_VIBRA_MS) {
-    // digitalWrite(VIBRA_PIN, LOW);
-  }
   if (timeDiff > TIMEOUT_LIGHTS_MS) {
     setColor(BLACK);
     intensity = 0;
