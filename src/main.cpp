@@ -5,7 +5,6 @@
 #include <HID-Project.h>
 
 #define LIGHT_PIN    10
-// #define VIBRA_PIN    16
 #define NR_OF_PIXELS 16
 #define TIMEOUT_VIBRA_MS   50
 #define TIMEOUT_LIGHTS_MS 600
@@ -35,7 +34,6 @@ void setup() {
   pinMode(LED_BUILTIN_TX,INPUT);
   pinMode(LED_BUILTIN_RX,INPUT);
 
-  // pinMode(VIBRA_PIN, OUTPUT);
   Timer1.stop();
   Timer1.detachInterrupt();
   Timer1.initialize(1000);
@@ -76,7 +74,6 @@ void loop() {
 }
 
 void volumeChange(uint16_t key, uint32_t color) {
-  // digitalWrite(VIBRA_PIN, HIGH);
   setColor(color);
   Consumer.write(key);
   lastInteraction = millis();
