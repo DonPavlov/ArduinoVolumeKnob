@@ -15,7 +15,7 @@ const uint32_t GREEN = strip.Color(  0, 255,   0);
 const uint32_t BLUE  = strip.Color(  0,   0, 255);
 const uint32_t BLACK = 0;
 
-ClickEncoder encoder(A0, A1, A2);
+ClickEncoder encoder(A1, A2, A0);
 unsigned long lastInteraction = 0;
 int16_t intensity = 0;
 
