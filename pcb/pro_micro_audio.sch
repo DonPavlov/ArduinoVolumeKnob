@@ -1,0 +1,365 @@
+EESchema Schematic File Version 4
+LIBS:pro_micro_audio-cache
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "Arduino Pro Micro Audio Controller Circuit"
+Date "2019-09-13"
+Rev "0.1"
+Comp "Paul Hein"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Connector_Generic:Conn_01x03 PinHeader1
+U 1 1 5D7D01F4
+P 8700 3250
+F 0 "PinHeader1" H 8780 3292 50  0000 L CNN
+F 1 "Neopixel Ring" H 8780 3201 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 8700 3250 50  0001 C CNN
+F 3 "~" H 8700 3250 50  0001 C CNN
+	1    8700 3250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C1
+U 1 1 5D7D1BE1
+P 7200 3750
+F 0 "C1" H 7318 3796 50  0000 L CNN
+F 1 "470uF" H 7318 3705 50  0000 L CNN
+F 2 "Capacitor_THT:C_Radial_D16.0mm_H25.0mm_P7.50mm" H 7238 3600 50  0001 C CNN
+F 3 "~" H 7200 3750 50  0001 C CNN
+	1    7200 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R1
+U 1 1 5D7D355B
+P 8050 3150
+F 0 "R1" V 7843 3150 50  0000 C CNN
+F 1 "470" V 7934 3150 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 7980 3150 50  0001 C CNN
+F 3 "~" H 8050 3150 50  0001 C CNN
+	1    8050 3150
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:CP C2
+U 1 1 5D7D9A8F
+P 7500 3750
+F 0 "C2" H 7618 3796 50  0000 L CNN
+F 1 "100uF" H 7618 3705 50  0000 L CNN
+F 2 "Capacitor_THT:C_Radial_D5.0mm_H11.0mm_P2.00mm" H 7538 3600 50  0001 C CNN
+F 3 "~" H 7500 3750 50  0001 C CNN
+	1    7500 3750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7500 3400 7500 3600
+Wire Wire Line
+	7500 3400 7500 3250
+Wire Wire Line
+	7500 3250 8500 3250
+Connection ~ 7500 3400
+Wire Wire Line
+	5800 4200 6050 4200
+Wire Wire Line
+	6050 4200 6050 3150
+Wire Wire Line
+	6050 3150 7900 3150
+Wire Wire Line
+	8200 3150 8500 3150
+Wire Wire Line
+	8500 3350 8200 3350
+Wire Wire Line
+	7150 3350 7150 3200
+Wire Wire Line
+	7500 3900 7500 4050
+Wire Wire Line
+	7500 4050 7300 4050
+Wire Wire Line
+	7200 4050 7200 3900
+Wire Wire Line
+	7200 4050 6000 4050
+Connection ~ 7200 4050
+Wire Wire Line
+	7200 3600 7200 3400
+Connection ~ 7200 3400
+$Comp
+L power:PWR_FLAG #FLG0101
+U 1 1 5D7E3B95
+P 6250 3400
+F 0 "#FLG0101" H 6250 3475 50  0001 C CNN
+F 1 "PWR_FLAG" H 6250 3573 50  0000 C CNN
+F 2 "" H 6250 3400 50  0001 C CNN
+F 3 "~" H 6250 3400 50  0001 C CNN
+	1    6250 3400
+	1    0    0    -1  
+$EndComp
+Connection ~ 6250 3400
+$Comp
+L power:GND #PWR0101
+U 1 1 5D7E48BD
+P 8200 3350
+F 0 "#PWR0101" H 8200 3100 50  0001 C CNN
+F 1 "GND" H 8205 3177 50  0000 C CNN
+F 2 "" H 8200 3350 50  0001 C CNN
+F 3 "" H 8200 3350 50  0001 C CNN
+	1    8200 3350
+	1    0    0    -1  
+$EndComp
+Connection ~ 8200 3350
+Wire Wire Line
+	8200 3350 7150 3350
+NoConn ~ 5800 3500
+NoConn ~ 5800 3100
+NoConn ~ 5800 3900
+NoConn ~ 5800 4000
+NoConn ~ 5800 4100
+NoConn ~ 4900 4200
+NoConn ~ 4900 4100
+NoConn ~ 4900 4000
+NoConn ~ 4900 3900
+NoConn ~ 4900 3800
+NoConn ~ 4900 3700
+NoConn ~ 4900 3200
+NoConn ~ 4900 3100
+Wire Wire Line
+	5800 3300 5850 3300
+Wire Wire Line
+	6250 3400 6550 3400
+$Comp
+L SparkFun-Boards:SPARKFUN_PRO_MICRO CHEAP_PRO_MICRO1
+U 1 1 5D7C9298
+P 5350 3650
+F 0 "CHEAP_PRO_MICRO1" H 5350 4450 45  0000 C CNN
+F 1 "SPARKFUN_PRO_MICRO" H 5350 4350 45  0000 C CNN
+F 2 "Boards:SPARKFUN_PRO_MICRO" H 5350 4450 20  0001 C CNN
+F 3 "" H 5350 3650 50  0001 C CNN
+F 4 "" H 5350 4381 60  0000 C CNN "Field4"
+	1    5350 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_02x03_Odd_Even KY-40
+U 1 1 5D7E7E0D
+P 6250 4650
+F 0 "KY-40" H 6300 4967 50  0000 C CNN
+F 1 "Conn_02x03_Odd_Even" H 6300 4876 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical" H 6300 4875 50  0001 C CNN
+F 3 "~" H 6250 4650 50  0001 C CNN
+	1    6250 4650
+	1    0    0    -1  
+$EndComp
+NoConn ~ 6550 4750
+Connection ~ 5950 3200
+Wire Wire Line
+	5950 3200 6000 3200
+$Comp
+L Device:R R2
+U 1 1 5D7EE626
+P 4300 3400
+F 0 "R2" V 4093 3400 50  0000 C CNN
+F 1 "10K" V 4184 3400 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 4230 3400 50  0001 C CNN
+F 3 "~" H 4300 3400 50  0001 C CNN
+	1    4300 3400
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 5D7F2B20
+P 6750 2600
+F 0 "R3" V 6543 2600 50  0000 C CNN
+F 1 "10K" V 6634 2600 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 6680 2600 50  0001 C CNN
+F 3 "~" H 6750 2600 50  0001 C CNN
+	1    6750 2600
+	0    1    1    0   
+$EndComp
+Connection ~ 6550 3400
+Wire Wire Line
+	6850 3200 6850 4950
+Wire Wire Line
+	6850 4950 6300 4950
+Wire Wire Line
+	6000 4550 6050 4550
+Connection ~ 6850 3200
+Wire Wire Line
+	6850 3200 7150 3200
+Wire Wire Line
+	5800 3800 5900 3800
+Wire Wire Line
+	5900 3800 5900 4650
+Wire Wire Line
+	5900 4650 6050 4650
+Wire Wire Line
+	5800 3700 6750 3700
+Wire Wire Line
+	6750 4650 6550 4650
+Wire Wire Line
+	6600 2600 6400 2600
+Wire Wire Line
+	6900 2600 6950 2600
+Connection ~ 6950 3400
+Wire Wire Line
+	6950 3400 7200 3400
+NoConn ~ 4900 3300
+Text Label 5900 4750 0    50   ~ 0
+CLK
+Text Label 6600 4650 0    50   ~ 0
+DT
+Text Label 5900 4650 0    50   ~ 0
+SW
+$Comp
+L Connector_Generic:Conn_01x02 ToggleSwitch1
+U 1 1 5D810EBD
+P 4350 2800
+F 0 "ToggleSwitch1" H 4350 2920 45  0000 C CNN
+F 1 "Connector_Generic:Conn_01x02" H 4350 3026 45  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 4350 3000 20  0001 C CNN
+F 3 "" H 4350 2800 50  0001 C CNN
+F 4 "PinHeader1x2" H 4350 2931 60  0001 C CNN "Field4"
+	1    4350 2800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6550 3400 6950 3400
+Wire Wire Line
+	7500 3250 7500 2800
+Connection ~ 7500 3250
+Wire Wire Line
+	6950 2600 6950 3400
+Wire Wire Line
+	6400 2600 6400 3300
+Wire Wire Line
+	7200 3400 7500 3400
+$Comp
+L power:GND #PWR0102
+U 1 1 5D86BB8A
+P 6300 4950
+F 0 "#PWR0102" H 6300 4700 50  0001 C CNN
+F 1 "GND" H 6305 4777 50  0000 C CNN
+F 2 "" H 6300 4950 50  0001 C CNN
+F 3 "" H 6300 4950 50  0001 C CNN
+	1    6300 4950
+	1    0    0    -1  
+$EndComp
+Connection ~ 6300 4950
+Wire Wire Line
+	6300 4950 6000 4950
+Wire Wire Line
+	6550 3400 6550 4550
+Wire Wire Line
+	6750 3700 6750 4650
+Wire Wire Line
+	6000 4950 6000 4550
+Wire Wire Line
+	5850 4750 6050 4750
+Wire Wire Line
+	5800 3600 5850 3600
+Wire Wire Line
+	5850 3600 5850 4750
+Wire Wire Line
+	5800 3200 5950 3200
+Wire Wire Line
+	5950 2600 6000 2600
+Wire Wire Line
+	5950 2600 5950 3200
+$Comp
+L power:PWR_FLAG #FLG01
+U 1 1 5D87867A
+P 6550 3200
+F 0 "#FLG01" H 6550 3275 50  0001 C CNN
+F 1 "PWR_FLAG" H 6550 3373 50  0000 C CNN
+F 2 "" H 6550 3200 50  0001 C CNN
+F 3 "~" H 6550 3200 50  0001 C CNN
+	1    6550 3200
+	1    0    0    -1  
+$EndComp
+Connection ~ 6550 3200
+Wire Wire Line
+	6550 3200 6850 3200
+Wire Wire Line
+	4150 2800 3700 2800
+NoConn ~ 4900 3500
+Wire Wire Line
+	3700 3600 3700 2800
+Wire Wire Line
+	4150 3400 4000 3400
+Wire Wire Line
+	4000 3600 4900 3600
+Wire Wire Line
+	4000 3600 3700 3600
+Wire Wire Line
+	4000 3400 4000 3600
+Connection ~ 4000 3600
+Wire Wire Line
+	5800 3400 6250 3400
+Wire Wire Line
+	6000 4050 6000 3200
+Connection ~ 6000 3200
+Wire Wire Line
+	6000 3200 6550 3200
+$Comp
+L power:GND #PWR01
+U 1 1 5D8182CB
+P 7300 4050
+F 0 "#PWR01" H 7300 3800 50  0001 C CNN
+F 1 "GND" H 7305 3877 50  0000 C CNN
+F 2 "" H 7300 4050 50  0001 C CNN
+F 3 "" H 7300 4050 50  0001 C CNN
+	1    7300 4050
+	1    0    0    -1  
+$EndComp
+Connection ~ 7300 4050
+Wire Wire Line
+	7300 4050 7200 4050
+Wire Wire Line
+	4550 2800 7500 2800
+$Comp
+L Connector_Generic:Conn_01x02 ResetButton1
+U 1 1 5D83F07E
+P 6200 2600
+F 0 "ResetButton1" H 6200 2720 45  0000 C CNN
+F 1 "Connector_Generic:Conn_01x02" H 6200 2826 45  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 6200 2800 20  0001 C CNN
+F 3 "" H 6200 2600 50  0001 C CNN
+F 4 "PinHeader1x2" H 6200 2731 60  0001 C CNN "Field4"
+	1    6200 2600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6000 2700 5850 2700
+Wire Wire Line
+	5850 2700 5850 3300
+Connection ~ 5850 3300
+Wire Wire Line
+	5850 3300 6400 3300
+Wire Wire Line
+	4550 2800 4550 3000
+Wire Wire Line
+	4550 3000 4150 3000
+Wire Wire Line
+	4150 3000 4150 2900
+Wire Wire Line
+	4450 3400 4550 3400
+$Comp
+L power:GND #PWR?
+U 1 1 5D829935
+P 4550 3400
+F 0 "#PWR?" H 4550 3150 50  0001 C CNN
+F 1 "GND" H 4555 3227 50  0000 C CNN
+F 2 "" H 4550 3400 50  0001 C CNN
+F 3 "" H 4550 3400 50  0001 C CNN
+	1    4550 3400
+	1    0    0    -1  
+$EndComp
+Connection ~ 4550 3400
+Wire Wire Line
+	4550 3400 4900 3400
+$EndSCHEMATC
