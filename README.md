@@ -18,6 +18,16 @@ PCB Layout
 The PCB itself was designed in KiCaD and has the following design:
 
 ![3dView]( ./pcb/pro_micro.png )
+![soldered]( ./image.jpg )
+
 
 It uses additional features of a possible reset button.
 And a free toggle Button to connect and do interesting stuff. (Select in grub the used os to boot or other such things)
+
+
+TODO
+-------------------
+
+* Implement functionality to select windows in grub (arrow down, arrow down, enter) after device was switched on after 5 seconds it will trigger (depends on grub timeout)
+    * Do this only if the switch was flipped into the windows position
+* Better documentation
