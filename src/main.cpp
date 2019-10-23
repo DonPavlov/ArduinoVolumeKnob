@@ -10,6 +10,7 @@
 #define TIMEOUT_VIBRA_MS   50
 #define TIMEOUT_LIGHTS_MS 600
 
+// #define DEBUG 1
 Adafruit_NeoPixel strip(NR_OF_PIXELS, LIGHT_PIN, NEO_GRB + NEO_KHZ800);
 const uint32_t RED   = strip.Color(255,   0,   0);
 const uint32_t GREEN = strip.Color(  0, 255,   0);
@@ -39,25 +40,33 @@ void setup() {
   #ifdef DEBUG
   Serial.begin(115200);
   while(true) {
-    Serial.println(val);
     delay(1000);
-    val = digitalRead(TOGGLE_PIN);
+    uint8_t val1 = digitalRead(TOGGLE_PIN);
+    Serial.println(val1);
   }
 #endif
-
   Timer1.stop();
   Timer1.detachInterrupt();
-  Timer1.initialize(1000);
-  Timer1.attachInterrupt([]{ encoder.service(); });
-  Consumer.begin();
 
   uint8_t val = digitalRead(TOGGLE_PIN);
-  if(1 == val) {
+  if(val == 1) {
     // Select Windows OS
-    // keyboard write  // 2x volume down
-    // keyboard write (enter)
+    delay(8000);
+    BootKeyboard.begin();
+    BootKeyboard.write(KEY_DOWN_ARROW);
+    delay(100);
+    BootKeyboard.write(KEY_DOWN_ARROW);
+    delay(100);
+    BootKeyboard.write(KEY_ENTER);
+    delay(100);
+
+    BootKeyboard.end();
   }
 
+  Timer1.initialize(1000);
+  Timer1.attachInterrupt([]{ encoder.service(); });
+
+  Consumer.begin();
 }
 
 void loop() {
