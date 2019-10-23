@@ -4,6 +4,7 @@
 #include <TimerOne.h>
 #include <HID-Project.h>
 
+#define TOGGLE_PIN 3
 #define LIGHT_PIN    10
 #define NR_OF_PIXELS 16
 #define TIMEOUT_VIBRA_MS   50
@@ -33,6 +34,18 @@ void setup() {
   // disable leds because we only need neopixels
   pinMode(LED_BUILTIN_TX,INPUT);
   pinMode(LED_BUILTIN_RX,INPUT);
+
+  pinMode(TOGGLE_PIN, INPUT);
+  uint8_t val = digitalRead(TOGGLE_PIN);
+
+#ifdef DEBUG
+  Serial.begin(115200);
+  while(true) {
+    Serial.println(val);
+    delay(1000);
+    val = digitalRead(TOGGLE_PIN);
+  }
+#endif
 
   Timer1.stop();
   Timer1.detachInterrupt();
