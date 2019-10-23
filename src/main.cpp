@@ -36,9 +36,7 @@ void setup() {
   pinMode(LED_BUILTIN_RX,INPUT);
 
   pinMode(TOGGLE_PIN, INPUT);
-  uint8_t val = digitalRead(TOGGLE_PIN);
-
-#ifdef DEBUG
+  #ifdef DEBUG
   Serial.begin(115200);
   while(true) {
     Serial.println(val);
@@ -52,6 +50,14 @@ void setup() {
   Timer1.initialize(1000);
   Timer1.attachInterrupt([]{ encoder.service(); });
   Consumer.begin();
+
+  uint8_t val = digitalRead(TOGGLE_PIN);
+  if(1 == val) {
+    // Select Windows OS
+    // keyboard write  // 2x volume down
+    // keyboard write (enter)
+  }
+
 }
 
 void loop() {
