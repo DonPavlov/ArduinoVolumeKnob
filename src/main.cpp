@@ -25,6 +25,7 @@ void setColor(uint32_t c);
 void volumeChange(uint16_t key, uint32_t color);
 void setup();
 void loop();
+void grubSelector();
 
 void setup() {
   lastInteraction = 0;
@@ -50,17 +51,8 @@ void setup() {
 
   uint8_t val = digitalRead(TOGGLE_PIN);
   if(val == 1) {
-    // Select Windows OS
-    delay(8000);
-    BootKeyboard.begin();
-    BootKeyboard.write(KEY_DOWN_ARROW);
-    delay(100);
-    BootKeyboard.write(KEY_DOWN_ARROW);
-    delay(100);
-    BootKeyboard.write(KEY_ENTER);
-    delay(100);
-
-    BootKeyboard.end();
+    delay(15000);  // wait 15 seconds before it is usable
+    grubSelector();
   }
 
   Timer1.initialize(1000);
@@ -68,6 +60,8 @@ void setup() {
 
   Consumer.begin();
 }
+
+
 
 void loop() {
   int16_t value = encoder.getValue();
@@ -113,4 +107,17 @@ void setColor(uint32_t c) {
       strip.setPixelColor(i, c);
   }
   strip.show();
+}
+
+void grubSelector() {
+    // Select Windows OS
+    BootKeyboard.begin();
+    BootKeyboard.write(KEY_DOWN_ARROW);
+    delay(100);
+    BootKeyboard.write(KEY_DOWN_ARROW);
+    delay(100);
+    BootKeyboard.write(KEY_ENTER);
+    delay(100);
+
+    BootKeyboard.end();
 }
