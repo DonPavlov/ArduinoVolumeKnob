@@ -19,6 +19,7 @@ The PCB itself was designed in KiCaD and has the following design:
 
 ![3dView]( ./pcb/pro_micro.png )
 ![soldered]( ./image.jpg )
+![schematic]( ./pcb/schematic_img/pro_micro_audio.svg )
 
 
 It uses additional features of a possible reset button.
