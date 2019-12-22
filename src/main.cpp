@@ -26,8 +26,10 @@ void volumeChange(uint16_t key, uint32_t color);
 void setup();
 void loop();
 void grubSelector();
+void colorWipe(uint32_t c, uint8_t wait);
 
 void setup() {
+  delay(3000);
   lastInteraction = 0;
   intensity = 0;
   strip.begin();
@@ -48,12 +50,12 @@ void setup() {
 #endif
   Timer1.stop();
   Timer1.detachInterrupt();
-
-  uint8_t val = digitalRead(TOGGLE_PIN);
-  if(val == 1) {
-    delay(15000);  // wait 15 seconds before it is usable
-    grubSelector();
-  }
+  
+  // uint8_t val = digitalRead(TOGGLE_PIN);
+  // if(val == 1) {
+  //   delay(5000);  // wait 15 seconds before it is usable
+  //   // grubSelector();
+  // }
 
   Timer1.initialize(1000);
   Timer1.attachInterrupt([]{ encoder.service(); });
@@ -62,36 +64,49 @@ void setup() {
 }
 
 
-
+uint8_t x = 0;
+uint8_t y = 0;
+uint8_t z = 0;
+  
 void loop() {
-  int16_t value = encoder.getValue();
-  if (value != 0) {
-    if (value < 0) {
-      intensity = max(1, min(intensity + 1, 10));
-      volumeChange(MEDIA_VOL_UP, GREEN);
+  if(digitalRead(TOGGLE_PIN)) {
+    strip.setBrightness(255);
+    
+    x += 25;
+    y += 40;
+    z += 10;
+    colorWipe(strip.Color(0,0,0), 25); // Black
+    colorWipe(strip.Color(x, y, z), 100); // Red
+  } else {
+    int16_t value = encoder.getValue();
+    if (value != 0) {
+      if (value < 0) {
+        intensity = max(1, min(intensity + 1, 10));
+        volumeChange(MEDIA_VOL_UP, GREEN);
+      }
+      else {
+        intensity = min(-1, max(intensity - 1, -10));
+        volumeChange(MEDIA_VOL_DOWN, RED);
+      }
     }
-    else {
-      intensity = min(-1, max(intensity - 1, -10));
-      volumeChange(MEDIA_VOL_DOWN, RED);
-    }
-  }
 
-  ClickEncoder::Button b = encoder.getButton();
-  if (b != ClickEncoder::Open) {
-    switch (b) {
-      case ClickEncoder::Clicked:
-        intensity = 9;
-        volumeChange(MEDIA_VOL_MUTE, BLUE);
-        break;
-   }
-  }
-  //
-  // LEDs nach inaktiver Zeit abschalten.
-  //
-  unsigned long timeDiff = millis() - lastInteraction;
-  if (timeDiff > TIMEOUT_LIGHTS_MS) {
-    setColor(BLACK);
-    intensity = 0;
+    ClickEncoder::Button b = encoder.getButton();
+    if (b != ClickEncoder::Open) {
+      switch (b) {
+        case ClickEncoder::Clicked:
+          intensity = 9;
+          volumeChange(MEDIA_VOL_MUTE, BLUE);
+          break;
+    }
+    }
+    //
+    // LEDs nach inaktiver Zeit abschalten.
+    //
+    unsigned long timeDiff = millis() - lastInteraction;
+    if (timeDiff > TIMEOUT_LIGHTS_MS) {
+      setColor(BLACK);
+      intensity = 0;
+    }
   }
 }
 
@@ -120,4 +135,12 @@ void grubSelector() {
     delay(100);
 
     BootKeyboard.end();
+}
+
+void colorWipe(uint32_t c, uint8_t wait) {
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+      strip.setPixelColor(i, c);
+      strip.show();
+      delay(wait);
+  }
 }
