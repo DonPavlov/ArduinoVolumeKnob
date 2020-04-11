@@ -1,21 +1,27 @@
-#include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
+#include <Arduino.h>
 #include <ClickEncoder.h>
-#include <TimerOne.h>
 #include <HID-Project.h>
+#include <TimerOne.h>
 
 #define TOGGLE_PIN 3
-#define LIGHT_PIN    10
+#define LIGHT_PIN 10
 #define NR_OF_PIXELS 16
-#define TIMEOUT_VIBRA_MS   50
+#define TIMEOUT_VIBRA_MS 50
 #define TIMEOUT_LIGHTS_MS 600
 
 // #define DEBUG 1
 Adafruit_NeoPixel strip(NR_OF_PIXELS, LIGHT_PIN, NEO_GRB + NEO_KHZ800);
-const uint32_t RED   = strip.Color(255,   0,   0);
-const uint32_t GREEN = strip.Color(  0, 255,   0);
-const uint32_t BLUE  = strip.Color(  0,   0, 255);
+const uint32_t WHITE = strip.Color(255, 255, 255);
+const uint32_t RED = strip.Color(255, 0, 0);
+const uint32_t GREEN = strip.Color(0, 255, 0);
+const uint32_t BLUE = strip.Color(0, 0, 255);
 const uint32_t BLACK = 0;
+const uint32_t PINK = strip.Color(255, 0, 255);
+const uint32_t DANGER_GREEN = strip.Color(51, 255, 51);
+const uint32_t YELLOW = strip.Color(240, 240, 0);
+const uint32_t ORANGE = strip.Color(255, 128, 0);
+const uint32_t TURKOISE = strip.Color(101, 240, 240);
 
 ClickEncoder encoder(A1, A2, A0);
 unsigned long lastInteraction = 0;
@@ -27,6 +33,7 @@ void setup();
 void loop();
 void grubSelector();
 void colorWipe(uint32_t c, uint8_t wait);
+void setColorState(uint8_t state);
 
 void setup() {
   delay(3000);
@@ -36,13 +43,13 @@ void setup() {
   strip.show();
   setColor(BLACK);
   // disable leds because we only need neopixels
-  pinMode(LED_BUILTIN_TX,INPUT);
-  pinMode(LED_BUILTIN_RX,INPUT);
+  pinMode(LED_BUILTIN_TX, INPUT);
+  pinMode(LED_BUILTIN_RX, INPUT);
 
   pinMode(TOGGLE_PIN, INPUT);
-  #ifdef DEBUG
+#ifdef DEBUG
   Serial.begin(115200);
-  while(true) {
+  while (true) {
     delay(1000);
     uint8_t val1 = digitalRead(TOGGLE_PIN);
     Serial.println(val1);
@@ -50,41 +57,60 @@ void setup() {
 #endif
   Timer1.stop();
   Timer1.detachInterrupt();
-  
+
   // uint8_t val = digitalRead(TOGGLE_PIN);
   // if(val == 1) {
   //   delay(5000);  // wait 15 seconds before it is usable
-  //   // grubSelector();
+  //   // grubSelector();   // currently not needed thanks to Linux only boot
   // }
 
   Timer1.initialize(1000);
-  Timer1.attachInterrupt([]{ encoder.service(); });
+  Timer1.attachInterrupt([] { encoder.service(); });
 
   Consumer.begin();
 }
 
+uint8_t colorState = 0u;
 
-uint8_t x = 0;
-uint8_t y = 0;
-uint8_t z = 0;
-  
 void loop() {
-  if(digitalRead(TOGGLE_PIN)) {
-    strip.setBrightness(255);
-    
-    x += 25;
-    y += 40;
-    z += 10;
-    colorWipe(strip.Color(0,0,0), 25); // Black
-    colorWipe(strip.Color(x, y, z), 100); // Red
+  if (digitalRead(TOGGLE_PIN)) {
+    int16_t value = encoder.getValue();
+    if (value != 0) {
+      if (value < 0) {
+        intensity++;
+        if (intensity > 8) {  // make it less bright, because of childrens eyes
+          intensity = 8;
+        }
+        if(colorState == 0) {
+          intensity = 6;
+        }
+        setColorState(colorState);
+      } else {
+        intensity--;
+        if (intensity < 0) {
+          intensity = 0;
+        }
+        setColorState(colorState);
+      }
+    }
+
+    ClickEncoder::Button b = encoder.getButton();
+    if (b != ClickEncoder::Open) {
+      if (b == ClickEncoder::Clicked) {
+        setColorState(colorState);
+      }
+      colorState++;
+      if (colorState > 10) {
+        colorState = 0;
+      }
+    }
   } else {
     int16_t value = encoder.getValue();
     if (value != 0) {
       if (value < 0) {
         intensity = max(1, min(intensity + 1, 10));
         volumeChange(MEDIA_VOL_UP, GREEN);
-      }
-      else {
+      } else {
         intensity = min(-1, max(intensity - 1, -10));
         volumeChange(MEDIA_VOL_DOWN, RED);
       }
@@ -97,7 +123,7 @@ void loop() {
           intensity = 9;
           volumeChange(MEDIA_VOL_MUTE, BLUE);
           break;
-    }
+      }
     }
     //
     // LEDs nach inaktiver Zeit abschalten.
@@ -119,28 +145,62 @@ void volumeChange(uint16_t key, uint32_t color) {
 void setColor(uint32_t c) {
   strip.setBrightness(abs(intensity) * 255 / 10);
   for (uint16_t i = 0; i < strip.numPixels(); i++) {
-      strip.setPixelColor(i, c);
+    strip.setPixelColor(i, c);
   }
   strip.show();
 }
 
 void grubSelector() {
-    // Select Windows OS
-    BootKeyboard.begin();
-    BootKeyboard.write(KEY_DOWN_ARROW);
-    delay(100);
-    BootKeyboard.write(KEY_DOWN_ARROW);
-    delay(100);
-    BootKeyboard.write(KEY_ENTER);
-    delay(100);
+  // Select Windows OS
+  BootKeyboard.begin();
+  BootKeyboard.write(KEY_DOWN_ARROW);
+  delay(100);
+  BootKeyboard.write(KEY_DOWN_ARROW);
+  delay(100);
+  BootKeyboard.write(KEY_ENTER);
+  delay(100);
 
-    BootKeyboard.end();
+  BootKeyboard.end();
 }
 
 void colorWipe(uint32_t c, uint8_t wait) {
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
-      strip.setPixelColor(i, c);
-      strip.show();
-      delay(wait);
+  for (uint16_t i = 0; i < strip.numPixels(); i++) {
+    strip.setPixelColor(i, c);
+    strip.show();
+    delay(wait);
+  }
+}
+
+void setColorState(uint8_t state) {
+  switch (state) {
+    case 0:
+      setColor(WHITE);
+      break;
+    case 1:
+      setColor(RED);
+      break;
+    case 2:
+      setColor(GREEN);
+      break;
+    case 3:
+      setColor(BLUE);
+      break;
+    case 4:
+      setColor(PINK);
+      break;
+    case 5:
+      setColor(DANGER_GREEN);
+      break;
+    case 6:
+      setColor(YELLOW);
+      break;
+    case 7:
+      setColor(ORANGE);
+      break;
+    case 8:
+      setColor(TURKOISE);
+      break;
+    default:
+      break;
   }
 }
