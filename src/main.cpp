@@ -10,7 +10,7 @@
 #define TIMEOUT_VIBRA_MS 50
 #define TIMEOUT_LIGHTS_MS 600
 
-// #define DEBUG 1
+#define DEBUG 1
 Adafruit_NeoPixel strip(NR_OF_PIXELS, LIGHT_PIN, NEO_GRB + NEO_KHZ800);
 const uint32_t WHITE = strip.Color(255, 255, 255);
 const uint32_t RED = strip.Color(255, 0, 0);
@@ -34,6 +34,12 @@ void loop();
 void grubSelector();
 void colorWipe(uint32_t c, uint8_t wait);
 void setColorState(uint8_t state);
+void rainbow(uint8_t wait);
+void rainbowCycle(uint8_t wait);
+void theaterChase(uint32_t c, uint8_t wait);
+void theaterChaseRainbow(uint8_t wait);
+uint32_t Wheel(byte WheelPos);
+void startShow(uint8_t i);
 
 void setup() {
   delay(3000);
@@ -49,15 +55,12 @@ void setup() {
   pinMode(TOGGLE_PIN, INPUT);
 #ifdef DEBUG
   Serial.begin(115200);
-  while (true) {
-    delay(1000);
-    uint8_t val1 = digitalRead(TOGGLE_PIN);
-    Serial.println(val1);
-  }
+  uint8_t val1 = digitalRead(TOGGLE_PIN);
+  Serial.println(val1);
 #endif
   Timer1.stop();
   Timer1.detachInterrupt();
-
+  delay(100);
   // uint8_t val = digitalRead(TOGGLE_PIN);
   // if(val == 1) {
   //   delay(5000);  // wait 15 seconds before it is usable
@@ -71,68 +74,46 @@ void setup() {
 }
 
 uint8_t colorState = 0u;
+uint8_t debugval = 0u;
+uint8_t count = 0;
+
+uint8_t showType = 0;
 
 void loop() {
-  if (digitalRead(TOGGLE_PIN)) {
-    int16_t value = encoder.getValue();
-    if (value != 0) {
-      if (value < 0) {
-        intensity++;
-        if (intensity > 8) {  // make it less bright, because of childrens eyes
-          intensity = 8;
-        }
-        if(colorState == 0) {
-          intensity = 6;
-        }
-        setColorState(colorState);
-      } else {
-        intensity--;
-        if (intensity < 0) {
-          intensity = 0;
-        }
-        setColorState(colorState);
-      }
+  int16_t value = encoder.getValue();
+  if (value != 0) {
+    if (value < 0) {
+      intensity = max(1, min(intensity + 1, 10));
+      volumeChange(MEDIA_VOLUME_UP, GREEN);
+#ifdef DEBUG
+      Serial.println("VolUp");
+#endif
+    } else {
+      intensity = min(-1, max(intensity - 1, -10));
+      volumeChange(MEDIA_VOLUME_DOWN, RED);
+#ifdef DEBUG
+      Serial.println("VolDown");
+#endif
     }
+  }
 
-    ClickEncoder::Button b = encoder.getButton();
-    if (b != ClickEncoder::Open) {
-      if (b == ClickEncoder::Clicked) {
-        setColorState(colorState);
-      }
-      colorState++;
-      if (colorState > 10) {
-        colorState = 0;
-      }
+  ClickEncoder::Button b = encoder.getButton();
+  if (b != ClickEncoder::Open) {
+    if (b == ClickEncoder::Clicked) {
+      intensity = 9;
+      volumeChange(MEDIA_VOL_MUTE, BLUE);
+#ifdef DEBUG
+      Serial.println("Mute");
+#endif
     }
-  } else {
-    int16_t value = encoder.getValue();
-    if (value != 0) {
-      if (value < 0) {
-        intensity = max(1, min(intensity + 1, 10));
-        volumeChange(MEDIA_VOL_UP, GREEN);
-      } else {
-        intensity = min(-1, max(intensity - 1, -10));
-        volumeChange(MEDIA_VOL_DOWN, RED);
-      }
-    }
-
-    ClickEncoder::Button b = encoder.getButton();
-    if (b != ClickEncoder::Open) {
-      switch (b) {
-        case ClickEncoder::Clicked:
-          intensity = 9;
-          volumeChange(MEDIA_VOL_MUTE, BLUE);
-          break;
-      }
-    }
-    //
-    // LEDs nach inaktiver Zeit abschalten.
-    //
-    unsigned long timeDiff = millis() - lastInteraction;
-    if (timeDiff > TIMEOUT_LIGHTS_MS) {
-      setColor(BLACK);
-      intensity = 0;
-    }
+  }
+  //
+  // LEDs nach inaktiver Zeit abschalten.
+  //
+  unsigned long timeDiff = millis() - lastInteraction;
+  if (timeDiff > TIMEOUT_LIGHTS_MS) {
+    setColor(BLACK);
+    intensity = 0;
   }
 }
 
